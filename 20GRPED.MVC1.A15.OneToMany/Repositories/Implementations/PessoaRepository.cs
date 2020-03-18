@@ -18,10 +18,10 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
 
         public int Add(Pessoa pessoa)
         {
-            var cmdText = "INSERT INTO Pessoa" +
-                          "		(Nome)" +
-                          "OUTPUT INSERTED.Id" +
-                          "VALUES	(@nome);";
+            var cmdText = "INSERT INTO Pessoa " +
+                          "		(Nome) " +
+                          " OUTPUT INSERTED.Id " +
+                          " VALUES	(@nome) ";
 
             using (var sqlConnection = new SqlConnection(_connectionString)) //já faz o close e dispose
             using (var sqlCommand = new SqlCommand(cmdText, sqlConnection)) //já faz o close

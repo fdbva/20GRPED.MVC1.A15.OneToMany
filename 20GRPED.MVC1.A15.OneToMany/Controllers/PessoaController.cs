@@ -47,11 +47,18 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         // POST: Pessoa/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Pessoa pessoa)
+        public ActionResult Create(PessoaCarroAggregateViewModel pessoaCarroAggregateViewModel)
         {
             try
             {
                 // TODO: Add insert logic here
+                _pessoaService.Add(
+                    new Pessoa {Nome = pessoaCarroAggregateViewModel.NomePessoa},
+                    new Carro
+                    {
+                        Modelo = pessoaCarroAggregateViewModel.ModeloCarro,
+                        PessoaId = pessoaCarroAggregateViewModel.PessoaIdCarro
+                    });
 
                 return RedirectToAction(nameof(Index));
             }
