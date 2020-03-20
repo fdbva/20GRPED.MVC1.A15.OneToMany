@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using _20GRPED.MVC1.A15.OneToMany.Models;
+using _20GRPED.MVC1.A15.OneToMany.Repositories;
 using _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations;
 using _20GRPED.MVC1.A15.OneToMany.Services;
 using _20GRPED.MVC1.A15.OneToMany.Services.Implementations;
@@ -17,12 +18,16 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         private readonly IPessoaService _pessoaService;
 
         public PessoaController(
-            IConfiguration configuration)
+            IPessoaService pessoaService,
+            CallCountScoped callCountScoped,
+            CallCountSingleton callCountSingleton,
+            CallCountTransient callCountTransient)
         {
-            _pessoaService = new PessoaService(
-                new PessoaRepository(configuration),
-                new CarroService(
-                    new CarroRepository(configuration)));
+            callCountScoped.Count++;
+            callCountSingleton.Count++;
+            callCountTransient.Count++;
+
+            _pessoaService = pessoaService;
         }
 
         // GET: Pessoa
@@ -57,7 +62,6 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
                     new Carro
                     {
                         Modelo = pessoaCarroAggregateViewModel.ModeloCarro,
-                        PessoaId = pessoaCarroAggregateViewModel.PessoaIdCarro
                     });
 
                 return RedirectToAction(nameof(Index));

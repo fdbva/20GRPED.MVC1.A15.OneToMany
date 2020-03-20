@@ -9,8 +9,14 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
         private readonly ICarroRepository _carroRepository;
 
         public CarroService(
-            ICarroRepository carroRepository)
+            ICarroRepository carroRepository,
+            CallCountScoped callCountScoped,
+            CallCountSingleton callCountSingleton,
+            CallCountTransient callCountTransient)
         {
+            callCountScoped.Count++;
+            callCountSingleton.Count++;
+            callCountTransient.Count++;
             _carroRepository = carroRepository;
         }
 

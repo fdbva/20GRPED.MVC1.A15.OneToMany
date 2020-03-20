@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using _20GRPED.MVC1.A15.OneToMany.Services.Implementations;
 
 namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
 {
@@ -11,17 +12,24 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
         private readonly string _connectionString;
 
         public CarroRepository(
-            IConfiguration configuration)
+            IConfiguration configuration,
+            CallCountScoped callCountScoped,
+            CallCountSingleton callCountSingleton,
+            CallCountTransient callCountTransient)
         {
+            callCountScoped.Count++;
+            callCountSingleton.Count++;
+            callCountTransient.Count++;
             _connectionString = configuration.GetValue<string>("OneToManyConnectionString");
         }
 
         public int Add(Carro carro)
         {
-            var cmdText = "INSERT INTO Carro" +
-                          "		(Modelo, PessoaId)" +
-                          "OUTPUT INSERTED.Id" +
-                          "VALUES	(@modelo, @pessoaId);";
+            var cmdText = 
+                    @"INSERT INTO Carro 
+                            (Modelo, PessoaId) 
+                      OUTPUT INSERTED.Id 
+                      VALUES (@modelo, @pessoaId);";
 
             using (var sqlConnection = new SqlConnection(_connectionString)) //já faz o close e dispose
             using (var sqlCommand = new SqlCommand(cmdText, sqlConnection)) //já faz o close

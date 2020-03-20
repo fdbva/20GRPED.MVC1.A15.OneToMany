@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using _20GRPED.MVC1.A15.OneToMany.Services.Implementations;
 
 namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
 {
@@ -11,8 +12,14 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
         private readonly string _connectionString;
 
         public PessoaRepository(
-            IConfiguration configuration)
+            IConfiguration configuration,
+            CallCountScoped callCountScoped,
+            CallCountSingleton callCountSingleton,
+            CallCountTransient callCountTransient)
         {
+            callCountScoped.Count++;
+            callCountSingleton.Count++;
+            callCountTransient.Count++;
             _connectionString = configuration.GetValue<string>("OneToManyConnectionString");
         }
 

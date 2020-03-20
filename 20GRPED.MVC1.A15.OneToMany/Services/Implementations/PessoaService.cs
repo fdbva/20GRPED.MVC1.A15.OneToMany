@@ -12,8 +12,14 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
 
         public PessoaService(
             IPessoaRepository pessoaRepository,
-            ICarroService carroService)
+            ICarroService carroService,
+            CallCountScoped callCountScoped,
+            CallCountSingleton callCountSingleton,
+            CallCountTransient callCountTransient)
         {
+            callCountScoped.Count++;
+            callCountSingleton.Count++;
+            callCountTransient.Count++;
             _pessoaRepository = pessoaRepository;
             _carroService = carroService;
         }

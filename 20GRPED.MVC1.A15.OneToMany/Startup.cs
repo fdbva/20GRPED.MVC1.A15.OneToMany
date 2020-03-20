@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using _20GRPED.MVC1.A15.OneToMany.Repositories;
+using _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations;
+using _20GRPED.MVC1.A15.OneToMany.Services;
+using _20GRPED.MVC1.A15.OneToMany.Services.Implementations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +28,15 @@ namespace _20GRPED.MVC1.A15.OneToMany
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddTransient<IPessoaRepository, PessoaRepository>();
+            services.AddTransient<ICarroRepository, CarroRepository>();
+            services.AddTransient<IPessoaService, PessoaService>();
+            services.AddTransient<ICarroService, CarroService>();
+
+            services.AddScoped<CallCountScoped>();
+            services.AddSingleton<CallCountSingleton>();
+            services.AddTransient<CallCountTransient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
