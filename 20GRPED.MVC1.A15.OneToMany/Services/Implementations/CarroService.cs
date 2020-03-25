@@ -29,5 +29,25 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
         {
             return _carroRepository.GetAll();
         }
+
+        public Carro GetById(int id)
+        {
+            return _carroRepository.GetById(id);
+        }
+
+        public void Update(int id, Carro carroUpdated)
+        {
+            _carroRepository.Update(id, carroUpdated);
+        }
+
+        public void Delete(int id)
+        {
+            _carroRepository.Delete(id);
+        }
+
+        public void DeleteAllCarsFromPessoa(int idPessoa)
+        {
+            _carroRepository.DeleteAllCarsFromPessoa(idPessoa);
+        }
     }
 }

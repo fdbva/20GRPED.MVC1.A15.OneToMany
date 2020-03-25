@@ -15,9 +15,11 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
 {
     public class PessoaController : Controller
     {
+        private readonly ICarroService _carroService;
         private readonly IPessoaService _pessoaService;
 
         public PessoaController(
+            ICarroService carroService,
             IPessoaService pessoaService,
             CallCountScoped callCountScoped,
             CallCountSingleton callCountSingleton,
@@ -27,6 +29,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
             callCountSingleton.Count++;
             callCountTransient.Count++;
 
+            _carroService = carroService;
             _pessoaService = pessoaService;
         }
 
@@ -40,7 +43,8 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         // GET: Pessoa/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var pessoa = _pessoaService.GetByIdWithCarros(id);
+            return View(pessoa);
         }
 
         // GET: Pessoa/Create
@@ -52,16 +56,16 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         // POST: Pessoa/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PessoaCarroAggregateViewModel pessoaCarroAggregateViewModel)
+        public ActionResult Create(PessoaCarroCreateAggregateViewModel pessoaCarroCreateAggregateViewModel)
         {
             try
             {
                 // TODO: Add insert logic here
                 _pessoaService.Add(
-                    new Pessoa {Nome = pessoaCarroAggregateViewModel.NomePessoa},
+                    new Pessoa {Nome = pessoaCarroCreateAggregateViewModel.NomePessoa},
                     new Carro
                     {
-                        Modelo = pessoaCarroAggregateViewModel.ModeloCarro,
+                        Modelo = pessoaCarroCreateAggregateViewModel.ModeloCarro,
                     });
 
                 return RedirectToAction(nameof(Index));
@@ -75,7 +79,8 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         // GET: Pessoa/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var pessoa = _pessoaService.GetById(id);
+            return View(pessoa);
         }
 
         // POST: Pessoa/Edit/5
@@ -86,6 +91,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
             try
             {
                 // TODO: Add update logic here
+                _pessoaService.Update(id, pessoa);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -98,7 +104,8 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         // GET: Pessoa/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var pessoa = _pessoaService.GetById(id);
+            return View(pessoa);
         }
 
         // POST: Pessoa/Delete/5
@@ -109,6 +116,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
             try
             {
                 // TODO: Add delete logic here
+                _pessoaService.Delete(id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -116,6 +124,18 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
             {
                 return View();
             }
+        }
+
+        public IActionResult TransferCar(int carroId, int pessoaId)
+        {
+            var carroUpdated = _carroService.GetById(carroId);
+            if (carroUpdated == null)
+                return View("CarroNaoEncontrado", pessoaId);
+
+            carroUpdated.PessoaId = pessoaId;
+
+            _carroService.Update(carroId, carroUpdated);
+            return View("Details");
         }
     }
 }

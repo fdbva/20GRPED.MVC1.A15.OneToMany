@@ -1,0 +1,55 @@
+﻿@model _20GRPED.MVC1.A15.OneToMany.Models.Pessoa
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Pessoa</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+<h4>Tranferir Carro</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="TransferCar">
+            @Html.Hidden("pessoaId", Model.Id)
+            <div class="form-group">
+                <label name="pessoaIdDisplay" class="control-label">Id da Pessoa</label>
+                <input name="pessoaIdDisplay" disabled="true" value="@Model.Id" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="carroId" class="control-label">Id do Carro</label>
+                <input name="carroId" type="number" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Transferir Carro" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

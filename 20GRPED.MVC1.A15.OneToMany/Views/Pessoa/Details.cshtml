@@ -1,0 +1,71 @@
+﻿@using _20GRPED.MVC1.A15.OneToMany.Controllers
+@model _20GRPED.MVC1.A15.OneToMany.Models.Pessoa
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Pessoa</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+    </dl>
+    
+    @if (!Model.Carros.Any())
+    {
+        <h4>Não possui carros</h4>
+    }
+    else
+    {
+        <h4>Carros</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    @nameof(Carro.Id)
+                </th>
+                <th>
+                    @nameof(Carro.Modelo)
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Carros)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Modelo)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "Carro", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", "Carro", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", "Carro", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    <a asp-action="Index">Back to List</a>
+</div>
