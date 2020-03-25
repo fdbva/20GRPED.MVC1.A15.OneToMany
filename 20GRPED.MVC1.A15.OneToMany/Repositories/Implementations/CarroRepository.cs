@@ -112,7 +112,8 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
         {
             const string cmdText = "UPDATE Carro " +
                                    "SET " +
-                                   "Modelo = (@modelo) " +
+                                   "Modelo = @modelo, " +
+                                   "PessoaId = @pessoaId " +
                                    "WHERE Id = @id;";
 
             using (var sqlConnection = new SqlConnection(_connectionString)) //já faz o close e dispose
@@ -122,6 +123,8 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
 
                 sqlCommand.Parameters
                     .Add("@modelo", SqlDbType.VarChar).Value = carroUpdated.Modelo;
+                sqlCommand.Parameters
+                    .Add("@pessoaId", SqlDbType.Int).Value = carroUpdated.PessoaId;
                 sqlCommand.Parameters
                     .Add("@id", SqlDbType.Int).Value = id;
 

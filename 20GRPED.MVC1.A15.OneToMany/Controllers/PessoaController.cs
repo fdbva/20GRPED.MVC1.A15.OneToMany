@@ -62,7 +62,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
             {
                 // TODO: Add insert logic here
                 _pessoaService.Add(
-                    new Pessoa {Nome = pessoaCarroCreateAggregateViewModel.NomePessoa},
+                    new Pessoa { Nome = pessoaCarroCreateAggregateViewModel.NomePessoa },
                     new Carro
                     {
                         Modelo = pessoaCarroCreateAggregateViewModel.ModeloCarro,
@@ -135,7 +135,8 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
             carroUpdated.PessoaId = pessoaId;
 
             _carroService.Update(carroId, carroUpdated);
-            return View("Details");
+
+            return RedirectToAction(nameof(Details), new { id = pessoaId });
         }
     }
 }
