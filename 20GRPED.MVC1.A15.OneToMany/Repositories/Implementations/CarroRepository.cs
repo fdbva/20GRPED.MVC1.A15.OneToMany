@@ -51,14 +51,26 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
             }
         }
 
-        public IEnumerable<Carro> GetAll()
+        public IEnumerable<Carro> GetAll(string filtro = null)
         {
-            const string cmdText = "SELECT * FROM Carro;";
+            var cmdText = "SELECT * FROM Carro;";
+
+            var hasFilter = !string.IsNullOrWhiteSpace(filtro);
+            if (hasFilter)
+            {
+                cmdText = "SELECT * FROM Carro WHERE UPPER(Modelo) LIKE @filtro";
+            }
 
             using (var sqlConnection = new SqlConnection(_connectionString)) //já faz o close e dispose
             using (var sqlCommand = new SqlCommand(cmdText, sqlConnection)) //já faz o close
             {
                 sqlCommand.CommandType = CommandType.Text;
+
+                if (hasFilter)
+                {
+                    sqlCommand.Parameters
+                        .Add("@filtro", SqlDbType.VarChar).Value = $"%{filtro.ToUpperInvariant()}%";
+                }
 
                 sqlConnection.Open();
 

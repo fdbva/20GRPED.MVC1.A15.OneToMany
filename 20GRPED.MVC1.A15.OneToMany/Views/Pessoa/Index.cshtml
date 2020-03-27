@@ -9,6 +9,16 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+    
+<form asp-action="Index">
+    <div class="form-group">
+        <label name="filtro" class="control-label">Filtro por nome</label>
+        <input name="filtro" value="@ViewBag.Filtro" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Filtrar!" class="btn btn-primary" />
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>

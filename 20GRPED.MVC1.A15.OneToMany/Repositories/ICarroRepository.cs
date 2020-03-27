@@ -6,7 +6,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories
     public interface ICarroRepository
     {
         int Add(Carro carro);
-        IEnumerable<Carro> GetAll();
+        IEnumerable<Carro> GetAll(string filtro = null);
         Carro GetById(int id);
         void Update(int id, Carro carroUpdated);
         void Delete(int id);

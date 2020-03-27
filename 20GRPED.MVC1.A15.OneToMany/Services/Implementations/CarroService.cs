@@ -25,9 +25,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
             return _carroRepository.Add(carro);
         }
 
-        public IEnumerable<Carro> GetAll()
+        public IEnumerable<Carro> GetAll(string filtro = null)
         {
-            return _carroRepository.GetAll();
+            return _carroRepository.GetAll(filtro);
         }
 
         public Carro GetById(int id)

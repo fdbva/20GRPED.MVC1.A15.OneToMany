@@ -1,4 +1,5 @@
-﻿using _20GRPED.MVC1.A15.OneToMany.Models;
+﻿using System.Linq;
+using _20GRPED.MVC1.A15.OneToMany.Models;
 using _20GRPED.MVC1.A15.OneToMany.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,10 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
             _carroService = carroService;
         }
         // GET: Carro
-        public ActionResult Index()
+        public ActionResult Index(string filtro = null)
         {
-            var carros = _carroService.GetAll();
+            ViewBag.Filtro = filtro;
+            var carros = _carroService.GetAll(filtro);
             return View(carros);
         }
 

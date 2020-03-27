@@ -34,9 +34,17 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         }
 
         // GET: Pessoa
-        public ActionResult Index()
+        public ActionResult Index(string filtro = null)
         {
             var pessoas = _pessoaService.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                pessoas = pessoas.Where(x => x.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase));
+
+                ViewBag.Filtro = filtro;
+            }
+
             return View(pessoas);
         }
 
