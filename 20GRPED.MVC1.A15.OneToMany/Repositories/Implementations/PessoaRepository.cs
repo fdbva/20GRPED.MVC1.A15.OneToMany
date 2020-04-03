@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using _20GRPED.MVC1.A15.OneToMany.Services.Implementations;
 
 namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
@@ -23,7 +24,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
             _connectionString = configuration.GetValue<string>("OneToManyConnectionString");
         }
 
-        public int Add(Pessoa pessoa)
+        public async Task<int> AddAsync(Pessoa pessoa)
         {
             const string cmdText = "INSERT INTO Pessoa " +
                           "		(Nome) " +
@@ -38,9 +39,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
                 sqlCommand.Parameters
                     .Add("@nome", SqlDbType.VarChar).Value = pessoa.Nome;
 
-                sqlConnection.Open();
+                await sqlConnection.OpenAsync();
 
-                var resultScalar = sqlCommand.ExecuteScalar();
+                var resultScalar = await sqlCommand.ExecuteScalarAsync();
 
                 var id = (int) resultScalar;
 
@@ -48,7 +49,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
             }
         }
 
-        public IEnumerable<Pessoa> GetAll()
+        public async Task<IEnumerable<Pessoa>> GetAllAsync()
         {
             const string cmdText = "SELECT * FROM Pessoa;";
 
@@ -57,12 +58,12 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
             {
                 sqlCommand.CommandType = CommandType.Text;
 
-                sqlConnection.Open();
+                await sqlConnection.OpenAsync();
 
                 var pessoas = new List<Pessoa>();
-                using (var reader = sqlCommand.ExecuteReader())
+                using (var reader = await sqlCommand.ExecuteReaderAsync())
                 {
-                    while (reader.Read())
+                    while (await reader.ReadAsync())
                     {
                         pessoas.Add(new Pessoa
                         {
@@ -137,7 +138,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             const string cmdText = "DELETE FROM Pessoa " +
                                    "WHERE Id = @id;";
@@ -150,9 +151,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
                 sqlCommand.Parameters
                     .Add("@id", SqlDbType.Int).Value = id;
 
-                sqlConnection.Open();
+                await sqlConnection.OpenAsync();
 
-                sqlCommand.ExecuteScalar();
+                await sqlCommand.ExecuteScalarAsync();
             }
         }
 

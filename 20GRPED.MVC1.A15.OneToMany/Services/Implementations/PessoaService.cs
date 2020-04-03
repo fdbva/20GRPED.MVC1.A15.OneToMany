@@ -2,6 +2,7 @@
 using _20GRPED.MVC1.A15.OneToMany.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
 {
@@ -24,7 +25,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
             _carroService = carroService;
         }
 
-        public int Add(Pessoa pessoa, Carro carro)
+        public async Task<int> AddAsync(Pessoa pessoa, Carro carro)
         {
             if(pessoa == null)
                 throw new ArgumentNullException("Não é possível cadastrar sem Pessoa");
@@ -32,21 +33,26 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
             if(string.IsNullOrWhiteSpace(pessoa.Nome) || pessoa.Nome.Length < 4)
                 throw new ArgumentException("Nome da pessoa inválido");
 
-            var id = _pessoaRepository.Add(pessoa);
+            var pessoaAddTask = _pessoaRepository.AddAsync(pessoa);
 
             if (carro == null)
+            {
+                var id = await pessoaAddTask;
                 return id;
+            }
 
-            carro.PessoaId = id;
-            _carroService.Add(carro);
+            carro.PessoaId = await pessoaAddTask;
+            var carroAddTask = await _carroService.AddAsync(carro);
 
-            return id;
+            return carro.PessoaId;
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            _carroService.DeleteAllCarsFromPessoa(id);
-            _pessoaRepository.Delete(id);
+            var deleteAllCarsFromPessoaTask = _carroService.DeleteAllCarsFromPessoaAsync(id);
+            var deletePessoaTask = _pessoaRepository.DeleteAsync(id);
+
+            await Task.WhenAll(deleteAllCarsFromPessoaTask, deletePessoaTask);
         }
 
         public Pessoa GetByIdWithCarros(int id)
@@ -56,9 +62,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
             return pessoa;
         }
 
-        public IEnumerable<Pessoa> GetAll()
+        public async Task<IEnumerable<Pessoa>> GetAllAsync()
         {
-            return _pessoaRepository.GetAll();
+            return await _pessoaRepository.GetAllAsync();
         }
 
         public Pessoa GetById(int id)

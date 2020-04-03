@@ -34,9 +34,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         }
 
         // GET: Pessoa
-        public ActionResult Index(string filtro = null)
+        public async Task<ActionResult> Index(string filtro = null)
         {
-            var pessoas = _pessoaService.GetAll();
+            var pessoas = await _pessoaService.GetAllAsync();
 
             if (!string.IsNullOrWhiteSpace(filtro))
             {
@@ -64,12 +64,12 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         // POST: Pessoa/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PessoaCarroCreateAggregateViewModel pessoaCarroCreateAggregateViewModel)
+        public async Task<ActionResult> Create(PessoaCarroCreateAggregateViewModel pessoaCarroCreateAggregateViewModel)
         {
             try
             {
                 // TODO: Add insert logic here
-                _pessoaService.Add(
+                await _pessoaService.AddAsync(
                     new Pessoa { Nome = pessoaCarroCreateAggregateViewModel.NomePessoa },
                     new Carro
                     {
@@ -119,12 +119,12 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         // POST: Pessoa/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Pessoa pessoa)
+        public async Task<ActionResult> Delete(int id, Pessoa pessoa)
         {
             try
             {
                 // TODO: Add delete logic here
-                _pessoaService.Delete(id);
+                await _pessoaService.DeleteAsync(id);
 
                 return RedirectToAction(nameof(Index));
             }

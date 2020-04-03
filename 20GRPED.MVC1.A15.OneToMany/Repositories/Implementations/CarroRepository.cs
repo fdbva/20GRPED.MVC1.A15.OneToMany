@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using _20GRPED.MVC1.A15.OneToMany.Services.Implementations;
 
 namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
@@ -23,7 +24,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
             _connectionString = configuration.GetValue<string>("OneToManyConnectionString");
         }
 
-        public int Add(Carro carro)
+        public async Task<int> AddAsync(Carro carro)
         {
             var cmdText = 
                     @"INSERT INTO Carro 
@@ -41,9 +42,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
                 sqlCommand.Parameters
                     .Add("@pessoaId", SqlDbType.Int).Value = carro.PessoaId;
 
-                sqlConnection.Open();
+                await sqlConnection.OpenAsync();
 
-                var resultScalar = sqlCommand.ExecuteScalar();
+                var resultScalar = await sqlCommand.ExecuteScalarAsync();
 
                 var id = (int)resultScalar;
 
@@ -165,7 +166,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
             }
         }
 
-        public void DeleteAllCarsFromPessoa(int idPessoa)
+        public async Task DeleteAllCarsFromPessoaAsync(int idPessoa)
         {
             const string cmdText = "DELETE FROM Carro " +
                                    "WHERE PessoaId = @id;";
@@ -178,9 +179,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Repositories.Implementations
                 sqlCommand.Parameters
                     .Add("@id", SqlDbType.Int).Value = idPessoa;
 
-                sqlConnection.Open();
+                await sqlConnection.OpenAsync();
 
-                sqlCommand.ExecuteScalar();
+                await sqlCommand.ExecuteScalarAsync();
             }
         }
     }

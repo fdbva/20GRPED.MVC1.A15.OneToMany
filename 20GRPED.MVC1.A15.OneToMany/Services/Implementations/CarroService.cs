@@ -1,6 +1,7 @@
 ﻿using _20GRPED.MVC1.A15.OneToMany.Models;
 using _20GRPED.MVC1.A15.OneToMany.Repositories;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
 {
@@ -20,9 +21,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
             _carroRepository = carroRepository;
         }
 
-        public int Add(Carro carro)
+        public async Task<int> AddAsync(Carro carro)
         {
-            return _carroRepository.Add(carro);
+            return await _carroRepository.AddAsync(carro);
         }
 
         public IEnumerable<Carro> GetAll(string filtro = null)
@@ -45,9 +46,9 @@ namespace _20GRPED.MVC1.A15.OneToMany.Services.Implementations
             _carroRepository.Delete(id);
         }
 
-        public void DeleteAllCarsFromPessoa(int idPessoa)
+        public async Task DeleteAllCarsFromPessoaAsync(int idPessoa)
         {
-            _carroRepository.DeleteAllCarsFromPessoa(idPessoa);
+            await _carroRepository.DeleteAllCarsFromPessoaAsync(idPessoa);
         }
     }
 }

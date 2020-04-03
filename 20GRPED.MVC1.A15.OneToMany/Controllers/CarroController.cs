@@ -43,7 +43,7 @@ namespace _20GRPED.MVC1.A15.OneToMany.Controllers
         {
             try
             {
-                _carroService.Add(carro);
+                _carroService.AddAsync(carro);
 
                 return RedirectToAction(nameof(Index));
             }

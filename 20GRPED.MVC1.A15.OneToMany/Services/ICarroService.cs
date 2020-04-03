@@ -1,15 +1,16 @@
 ﻿using _20GRPED.MVC1.A15.OneToMany.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace _20GRPED.MVC1.A15.OneToMany.Services
 {
     public interface ICarroService
     {
-        int Add(Carro carro);
+        Task<int> AddAsync(Carro carro);
         IEnumerable<Carro> GetAll(string filtro = null);
         Carro GetById(int id);
         void Update(int id, Carro carroUpdated);
         void Delete(int id);
-        void DeleteAllCarsFromPessoa(int idPessoa);
+        Task DeleteAllCarsFromPessoaAsync(int idPessoa);
     }
 }
